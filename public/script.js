@@ -48,15 +48,78 @@ const scrollToBottom = () => {
     div.scrollTop(div.prop("scrollHeight"));
 };
 
+// function for mute and unmute
+const muteUnmute = () => {
+    // check if our stream's audio is on or not
+    const enabled = myVideoStream.getAudioTracks()[0].enabled;
+    if(enabled) {
+        myVideoStream.getAudioTracks()[0].enable = false;
+        setUnmuteButton();
+    } else {
+        setMuteButton();
+        myVideoStream.getAudioTracks()[0].enable = true;
+    }
+}
+
+// mute icon change 
+const setMuteButton = () => {
+    const html = `
+    <i class="fas fa-microphone"></i>
+    <span>Mute</span>
+    `
+    document.querySelector('.main_mute_button').innerHTML = html;
+}
+
+// unmute icon change
+const setUnmuteButton = () => {
+    const html = `
+        <i class="unmute fas fa-microphone-slash"></i>
+        <span>Unmute</span>
+    `
+    document.querySelector('.main_mute_button').innerHTML = html; 
+}
+
+// function for play stop video
+const playStop = () => {
+    const enabled = myVideoStream.getVideoTracks()[0].enabled;
+    if(enabled) {
+        myVideoStream.getVideoTracks()[0].enabled = false;
+        setPlayVideo();
+    } else {
+        setStopVideo();
+        myVideoStream.getVideoTracks()[0].enabled = true;
+    }
+}
+
+// stop video icon change
+const setStopVideo = () => {
+    const html = `
+        <i class="fas fa-video"></i>
+        <span>Stop Video</span>
+    `
+    document.querySelector('.main_video_button').innerHTML = html;
+}
+
+// start video icon change
+const setPlayVideo = () => {
+    const html = `
+        <i class="stop fas fa-video-slash></i>
+        <span>Play Video</span>
+    `
+    document.querySelector('.main_video_button').innerHTLM = html;
+}
+
 
 
 // obtain access to media data from user hardware --> return a promises
+let myVideoStream;
 navigator.mediaDevices.getUserMedia({
     video: true,
     audio: true
 })
 .then(stream => {
     // process our video stream on the page
+    myVideoStream = stream;
     addVideoStream(myVideo, stream);
     
     // wait for current user's stream when its done (since its a promise) and sent it to others
@@ -102,6 +165,7 @@ socket.on('createMessage', message => {
         // we need to make sure that all messages will stay in the messages div
         scrollToBottom();
 });
+
 
 
 

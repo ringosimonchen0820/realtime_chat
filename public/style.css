@@ -58,6 +58,10 @@ video {
     font-size: 24px; 
 }
 
+.unmute, .stop {
+   color: #CC3B33;
+}
+
 .leave_meeting {
     color: #EB534B;
 }
